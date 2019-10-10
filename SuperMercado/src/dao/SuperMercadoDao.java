@@ -92,5 +92,30 @@ public class SuperMercadoDao {
             System.out.println(ex.getMessage());
             return null;
         }
-}
+    }
+         
+     public static SuperMercado consultar(int primaryKey) {
+        //editar o SQL conforme a entidade
+        String sql = "SELECT codigo, nome_fantasia, razao_social, nr_funcionarios, fundacao, valor_bolsa FROM SuperMercado WHERE codigo=?";
+        PreparedStatement ps;
+        try {
+            ps = conexao.Conexao.getConexao().prepareStatement(sql);
+            ps.setInt(1, primaryKey);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                SuperMercado objeto = new SuperMercado();
+                //definir um set para cada atributo da entidade, cuidado com o tipo
+                objeto.setCodigo(rs.getInt("codigo"));
+                objeto.setNome_fantasia(rs.getString("nome_fantasia"));
+                objeto.setRazao_social(rs.getString("razao_social"));
+                objeto.setNr_funcionarios(rs.getInt("nr_funcionarios"));
+                objeto.setFundacao(rs.getDate("fundacao").toLocalDate());
+                objeto.setValor_bolsa(rs.getDouble("valor_bolsa"));
+                return objeto;//não mexa nesse, ele adiciona o objeto na lista
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+    }
 }

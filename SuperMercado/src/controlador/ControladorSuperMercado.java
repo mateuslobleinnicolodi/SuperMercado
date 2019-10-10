@@ -35,6 +35,10 @@ public class ControladorSuperMercado {
         boolean resultado = SuperMercadoDao.inserir(objeto);
         if (resultado) {
             JOptionPane.showMessageDialog(null, "Inserido com sucesso!");
+            if (man.listagem != null) {
+     atualizarTabela(man.listagem.tabela); //atualizar a tabela da listagem
+}
+man.dispose();//fechar a tela da manutenção
         } else {
             JOptionPane.showMessageDialog(null, "Erro!");
         }
@@ -53,6 +57,10 @@ public class ControladorSuperMercado {
         boolean resultado = SuperMercadoDao.alterar(objeto);
         if (resultado) {
             JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+            if (man.listagem != null) {
+     atualizarTabela(man.listagem.tabela); //atualizar a tabela da listagem
+}
+man.dispose();//fechar a tela da manutenção
         } else {
             JOptionPane.showMessageDialog(null, "Erro!");
         }
@@ -65,6 +73,10 @@ public class ControladorSuperMercado {
         boolean resultado = SuperMercadoDao.excluir(objeto);
         if (resultado) {
             JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
+            if (man.listagem != null) {
+     atualizarTabela(man.listagem.tabela); //atualizar a tabela da listagem
+}
+man.dispose();//fechar a tela da manutenção
         } else {
             JOptionPane.showMessageDialog(null, "Erro!");
         }
@@ -88,10 +100,24 @@ public class ControladorSuperMercado {
             linha.add(objeto.getNome_fantasia());
             linha.add(objeto.getRazao_social());
             linha.add(objeto.getNr_funcionarios());
-            linha.add(objeto.getFundacao());
+            linha.add(objeto.getFundacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             linha.add(objeto.getValor_bolsa());
             modelo.addRow(linha); //adicionando a linha na tabela
         }
         tabela.setModel(modelo);
+    }
+     
+     public static void atualizaCampos(ManutencaoSuperMercado man, int pk){ 
+        SuperMercado objeto = SuperMercadoDao.consultar(pk);
+        //Definindo os valores do campo na tela (um para cada atributo/campo)
+        man.jtfCodigo.setText(objeto.getCodigo().toString());
+        man.jtfNome_fantasia.setText(objeto.getNome_fantasia());
+        man.jtfRazao_social.setText(objeto.getRazao_social());
+        man.jtfNr_funcionarios.setText(objeto.getNr_funcionarios().toString());
+        man.jtfFundacao.setText(objeto.getFundacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        man.jtfValor_bolsa.setText(objeto.getValor_bolsa().toString());
+        
+        man.jtfCodigo.setEnabled(false); //desabilitando o campo código
+        man.btnAdicionar.setEnabled(false); //desabilitando o botão adicionar
     }
 }
